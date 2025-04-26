@@ -1,0 +1,16 @@
+1> Create a Virtual Environment:
+
+    Open a terminal or command prompt and navigate to the folder where your project is located.
+    Command: python -m venv venv
+
+2> Activate the Virtual Environment:
+     Command: venv\Scripts\activate
+
+3> Install Dependencies from requirements.txt
+     Command: pip install -r requirements.txt
+
+4>  Run the Phishing Link Detector Script
+    command:  python phishing_link_detector.py
+
+5> Deactivate the Virtual Environment (When Done)
+    command: deactivate
