@@ -35,20 +35,19 @@ def extract_features(url):
         whois_info = whois.whois(domain)
         creation_date = whois_info.creation_date
 
-        # Handle potential list format
         if isinstance(creation_date, list):
             creation_date = creation_date[0]
 
         if creation_date:
             age_days = (datetime.now() - creation_date).days
             features['domain_age_days'] = age_days
-            features['new_domain'] = age_days < 180  # less than 6 months old
+            features['new_domain'] = age_days < 180
         else:
             features['domain_age_days'] = -1
-            features['new_domain'] = True  # unknown? play it safe
+            features['new_domain'] = True
     except Exception as e:
         features['domain_age_days'] = -1
-        features['new_domain'] = True  # If we can't get WHOIS info, flag it
+        features['new_domain'] = True
 
     return features
 
@@ -70,7 +69,7 @@ def classify(features):
     if features['has_suspicious_words']:
         score += 2
     if features.get('new_domain', False):
-        score += 2  # recently registered = extra suspicious
+        score += 2
 
     if score >= 5:
         return "⚠️ Suspicious (Likely Phishing)"
@@ -79,13 +78,18 @@ def classify(features):
 
 def main():
     url = input("Enter a URL to check: ").strip()
+
+    # Automatically prepend https:// if missing
+    if not urllib.parse.urlparse(url).scheme:
+        url = "https://" + url
+
     features = extract_features(url)
     result = classify(features)
 
     print("\n🔍 Analysis:")
     for k, v in features.items():
         print(f"{k}: {v}")
-    print("\nResult: ", result)
+    print("\nResult:", result)
 
 if __name__ == "__main__":
     main()
